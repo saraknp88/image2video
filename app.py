@@ -15,19 +15,20 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Custom CSS to integrate with your beautiful UI
+# Custom CSS with the complete beautiful UI design
 st.markdown("""
 <style>
+    /* Import Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    
+    /* Main App Background with animated gradient */
     .stApp {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
         background-size: 400% 400%;
         animation: gradientShift 20s ease infinite;
-    }
-    
-    @keyframes gradientShift {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
+        min-height: 100vh;
+        position: relative;
     }
     
     .stApp::before {
@@ -42,6 +43,21 @@ st.markdown("""
         z-index: -1;
     }
     
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    
+    /* Main container styling */
+    .main .block-container {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+        color: #2d3436;
+        line-height: 1.6;
+    }
+    
+    /* Header styling */
     .main-header {
         text-align: center;
         padding: 2rem 0;
@@ -56,6 +72,19 @@ st.markdown("""
         background-clip: text;
         font-weight: 800;
         margin-bottom: 0.5rem;
+        position: relative;
+    }
+    
+    .main-header h1::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 4px;
+        background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+        border-radius: 2px;
     }
     
     .main-header p {
@@ -65,63 +94,234 @@ st.markdown("""
         opacity: 0.8;
     }
     
+    /* Card containers */
+    .upload-container {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 24px;
+        padding: 2rem;
+        margin: 1rem 0;
+        box-shadow: 0 20px 60px rgba(102, 126, 234, 0.1), 0 8px 32px rgba(118, 75, 162, 0.08);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        position: relative;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+    }
+    
+    .upload-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+        background-size: 200% 100%;
+        animation: shimmer 3s ease-in-out infinite;
+    }
+    
+    @keyframes shimmer {
+        0% { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
+    }
+    
+    .upload-container:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 25px 80px rgba(102, 126, 234, 0.15), 0 12px 40px rgba(118, 75, 162, 0.12);
+    }
+    
+    /* Section headers */
+    h2, h3 {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-weight: 700;
+    }
+    
+    /* Buttons */
     .stButton > button {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-        color: white;
+        background-size: 200% 200%;
+        animation: gradientMove 4s ease infinite;
+        color: white !important;
         border: none;
-        padding: 0.75rem 2rem;
+        padding: 1.2rem 2rem;
         border-radius: 20px;
+        font-size: 1.1rem;
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 1px;
-        transition: all 0.3s ease;
+        transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+        box-shadow: 0 8px 30px rgba(102, 126, 234, 0.3);
         width: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .stButton > button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s;
     }
     
     .stButton > button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
     }
     
-    .upload-container {
+    .stButton > button:hover::before {
+        left: 100%;
+    }
+    
+    .stButton > button:disabled {
+        background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%) !important;
+        cursor: not-allowed;
+        opacity: 0.6;
+        transform: none;
+        box-shadow: none;
+        animation: none;
+    }
+    
+    @keyframes gradientMove {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    
+    /* Text inputs and textareas */
+    .stTextInput > div > div > input,
+    .stTextArea > div > div > textarea,
+    .stSelectbox > div > div > select {
+        border: 2px solid rgba(118, 75, 162, 0.2) !important;
+        border-radius: 16px !important;
+        background: rgba(255, 255, 255, 0.95) !important;
+        color: #2d3436 !important;
+        font-weight: 500;
+        transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+        box-shadow: 0 4px 20px rgba(118, 75, 162, 0.05);
+    }
+    
+    .stTextInput > div > div > input:focus,
+    .stTextArea > div > div > textarea:focus,
+    .stSelectbox > div > div > select:focus {
+        border-color: #667eea !important;
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1), 0 8px 25px rgba(102, 126, 234, 0.15) !important;
+        transform: translateY(-2px);
+    }
+    
+    /* File uploader */
+    .stFileUploader > div > div {
         background: rgba(255, 255, 255, 0.95);
+        border: 3px dashed #764ba2;
         border-radius: 20px;
         padding: 2rem;
-        margin: 1rem 0;
-        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.1);
-        border-top: 4px solid;
-        border-image: linear-gradient(90deg, #667eea, #764ba2, #f093fb) 1;
+        transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+        position: relative;
+        overflow: hidden;
     }
     
-    .stTextArea textarea {
-        border: 2px solid rgba(118, 75, 162, 0.2);
-        border-radius: 12px;
-        background: rgba(255, 255, 255, 0.95);
-    }
-    
-    .stTextArea textarea:focus {
+    .stFileUploader > div > div:hover {
         border-color: #667eea;
-        box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        transform: scale(1.02);
+        box-shadow: 0 10px 30px rgba(118, 75, 162, 0.2);
     }
     
+    /* Progress bars */
+    .stProgress > div > div > div {
+        background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+        border-radius: 10px;
+    }
+    
+    /* Status messages */
     .success-message {
-        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-        border: 2px solid rgba(102, 126, 234, 0.3);
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+        border: 2px solid rgba(102, 126, 234, 0.4);
         border-radius: 12px;
-        padding: 1rem;
+        padding: 1.2rem;
         margin: 1rem 0;
         color: #2d3436;
         font-weight: 600;
+        font-size: 1rem;
+        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.15);
     }
     
     .error-message {
-        background: linear-gradient(135deg, rgba(245, 87, 108, 0.1) 0%, rgba(240, 147, 251, 0.1) 100%);
-        border: 2px solid rgba(245, 87, 108, 0.3);
+        background: linear-gradient(135deg, rgba(245, 87, 108, 0.15) 0%, rgba(240, 147, 251, 0.15) 100%);
+        border: 2px solid rgba(245, 87, 108, 0.4);
         border-radius: 12px;
-        padding: 1rem;
+        padding: 1.2rem;
         margin: 1rem 0;
         color: #2d3436;
         font-weight: 600;
+        font-size: 1rem;
+        box-shadow: 0 4px 20px rgba(245, 87, 108, 0.15);
+    }
+    
+    /* Sidebar styling */
+    .css-1d391kg {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(10px);
+    }
+    
+    /* Download button */
+    .stDownloadButton > button {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #667eea 100%);
+        background-size: 200% 200%;
+        animation: gradientMove 4s ease infinite;
+        color: white !important;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 16px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+        box-shadow: 0 8px 30px rgba(240, 147, 251, 0.3);
+        width: 100%;
+    }
+    
+    .stDownloadButton > button:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 12px 40px rgba(240, 147, 251, 0.4);
+    }
+    
+    /* Video player */
+    video {
+        border-radius: 15px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        max-width: 100%;
+    }
+    
+    /* Loading spinner */
+    .stSpinner > div {
+        border-top-color: #667eea !important;
+        animation: spin 1s linear infinite, colorShift 3s ease-in-out infinite;
+    }
+    
+    @keyframes colorShift {
+        0% { border-top-color: #667eea; }
+        33% { border-top-color: #764ba2; }
+        66% { border-top-color: #f093fb; }
+        100% { border-top-color: #667eea; }
+    }
+    
+    /* Responsive design */
+    @media (max-width: 768px) {
+        .main-header h1 {
+            font-size: 2rem;
+        }
+        
+        .upload-container {
+            padding: 1rem;
+            margin: 0.5rem 0;
+        }
     }
 </style>
 """, unsafe_allow_html=True)
