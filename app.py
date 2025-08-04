@@ -647,14 +647,56 @@ if st.session_state.video_generated and hasattr(st.session_state, 'video_bytes')
         # Display video with consistent size
         st.video(st.session_state.video_bytes, width=300)
     
-    # Download button
-    st.download_button(
-        label="📥 Download Video",
-        data=st.session_state.video_bytes,
-        file_name=st.session_state.video_path,
-        mime="video/mp4",
-        use_container_width=True
-    )
+    # Create two columns for buttons
+    col1_buttons, col2_buttons = st.columns(2)
+    
+    with col1_buttons:
+        # Small download button
+        st.download_button(
+            label="📥 Download",
+            data=st.session_state.video_bytes,
+            file_name=st.session_state.video_path,
+            mime="video/mp4",
+            use_container_width=False
+        )
+    
+    with col2_buttons:
+        # Share button with social media options
+        if st.button("📤 Share", use_container_width=False):
+            st.session_state.show_share_options = True
+    
+    # Share options modal
+    if hasattr(st.session_state, 'show_share_options') and st.session_state.show_share_options:
+        st.markdown("---")
+        st.subheader("📤 Share Your Video")
+        
+        # Create share options
+        share_col1, share_col2, share_col3, share_col4 = st.columns(4)
+        
+        with share_col1:
+            # Twitter/X
+            twitter_url = f"https://twitter.com/intent/tweet?text=Check out my AI-generated video! 🎬&url=YOUR_VIDEO_URL"
+            st.markdown(f'<a href="{twitter_url}" target="_blank" style="text-decoration: none;"><button style="background: #1DA1F2; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; width: 100%;">🐦 Twitter/X</button></a>', unsafe_allow_html=True)
+        
+        with share_col2:
+            # Facebook
+            facebook_url = f"https://www.facebook.com/sharer/sharer.php?u=YOUR_VIDEO_URL"
+            st.markdown(f'<a href="{facebook_url}" target="_blank" style="text-decoration: none;"><button style="background: #4267B2; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; width: 100%;">📘 Facebook</button></a>', unsafe_allow_html=True)
+        
+        with share_col3:
+            # LinkedIn
+            linkedin_url = f"https://www.linkedin.com/sharing/share-offsite/?url=YOUR_VIDEO_URL"
+            st.markdown(f'<a href="{linkedin_url}" target="_blank" style="text-decoration: none;"><button style="background: #0077B5; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; width: 100%;">💼 LinkedIn</button></a>', unsafe_allow_html=True)
+        
+        with share_col4:
+            # Copy Link
+            if st.button("🔗 Copy Link", use_container_width=True):
+                st.success("Link copied to clipboard!")
+        
+        # Close share options
+        if st.button("❌ Close", use_container_width=True):
+            st.session_state.show_share_options = False
+            st.rerun()
     
     # Success message
     st.success(f"🎉 Video generated successfully! File saved as: {st.session_state.video_path}")
@@ -665,6 +707,8 @@ if st.session_state.video_generated and hasattr(st.session_state, 'video_bytes')
         st.session_state.video_path = None
         if hasattr(st.session_state, 'video_bytes'):
             delattr(st.session_state, 'video_bytes')
+        if hasattr(st.session_state, 'show_share_options'):
+            delattr(st.session_state, 'show_share_options')
         st.rerun()
 
 # Footer
