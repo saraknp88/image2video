@@ -671,42 +671,41 @@ if st.session_state.video_generated and hasattr(st.session_state, 'video_bytes')
         # Display video with consistent size
         st.video(st.session_state.video_bytes, width=400)
         
-        # Create buttons that align with video width
+        # Create buttons that align with video width using a fixed container
         st.markdown(
             """
-            <style>
-            .video-buttons {
-                width: 400px !important;
-                max-width: 400px !important;
-            }
-            .video-buttons > div {
-                width: 100% !important;
-            }
-            </style>
+            <div style="width: 400px; margin: 10px 0;">
+                <div style="display: flex; gap: 8px;">
+                    <div style="flex: 1;">
+                        <button style="width: 100%; background: linear-gradient(135deg, #f59e0b 0%, #f97316 50%, #8b5cf6 100%); color: white; border: none; padding: 12px 16px; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 14px;">📥 Download</button>
+                    </div>
+                    <div style="flex: 1;">
+                        <button style="width: 100%; background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #f59e0b 100%); color: white; border: none; padding: 12px 16px; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 14px;">📤 Share</button>
+                    </div>
+                </div>
+            </div>
             """,
             unsafe_allow_html=True
         )
         
-        # Create buttons with fixed width container
-        with st.container():
-            st.markdown('<div class="video-buttons">', unsafe_allow_html=True)
-            
-            # Download and Share buttons
-            col1, col2 = st.columns(2)
-            with col1:
-                st.download_button(
-                    label="📥 Download",
-                    data=st.session_state.video_bytes,
-                    file_name=st.session_state.video_path,
-                    mime="video/mp4",
-                    use_container_width=True
-                )
-            
-            with col2:
-                if st.button("📤 Share", use_container_width=True):
-                    st.session_state.show_share_options = True
-            
-            st.markdown('</div>', unsafe_allow_html=True)
+        # Hidden Streamlit buttons for actual functionality
+        st.markdown('<div style="display: none;">', unsafe_allow_html=True)
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            st.download_button(
+                label="📥 Download",
+                data=st.session_state.video_bytes,
+                file_name=st.session_state.video_path,
+                mime="video/mp4",
+                key="download-btn"
+            )
+        
+        with col2:
+            if st.button("📤 Share", key="share-btn"):
+                st.session_state.show_share_options = True
+        
+        st.markdown('</div>', unsafe_allow_html=True)
     
     # Share options modal
     if hasattr(st.session_state, 'show_share_options') and st.session_state.show_share_options:
