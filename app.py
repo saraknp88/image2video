@@ -226,7 +226,16 @@ st.markdown("""
     /* Progress bars */
     .stProgress > div > div > div {
         background: linear-gradient(90deg, #8b5cf6, #a855f7, #f59e0b);
-        border-radius: 8px;
+        border-radius: 12px;
+        height: 12px;
+        box-shadow: 0 2px 8px rgba(139, 92, 246, 0.2);
+    }
+    
+    .stProgress > div {
+        background: rgba(139, 92, 246, 0.1);
+        border-radius: 12px;
+        height: 12px;
+        margin: 1rem 0;
     }
     
     /* Status messages */
@@ -496,9 +505,9 @@ with col1:
     )
     
     if uploaded_file is not None:
-        # Display the uploaded image
+        # Display the uploaded image with consistent size
         image = Image.open(uploaded_file)
-        st.image(image, caption="Uploaded Image", use_container_width=True)
+        st.image(image, caption="Uploaded Image", width=300)
     
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -534,40 +543,40 @@ with col2:
 if st.session_state.processing and uploaded_file and prompt.strip():
     st.markdown("---")
     
-    # Progress tracking
+    # Progress tracking with better styling
+    st.markdown('<div class="success-message">🎬 Starting your video generation journey...</div>', unsafe_allow_html=True)
     progress_bar = st.progress(0)
     status_container = st.container()
     
     with status_container:
         # Step 1: Upload image
-        st.markdown('<div class="success-message">🔄 Step 1: Uploading image to ImgBB...</div>', unsafe_allow_html=True)
+        st.markdown('<div class="success-message">📤 Step 1: Preparing your image for AI processing...</div>', unsafe_allow_html=True)
         progress_bar.progress(20)
         
         image_url = upload_to_imgbb(uploaded_file)
         
         if image_url:
-            st.markdown('<div class="success-message">✅ Step 1 Complete: Image uploaded successfully!</div>', unsafe_allow_html=True)
-            st.info(f"Image URL: {image_url}")
+            st.markdown('<div class="success-message">✅ Step 1 Complete: Image ready for AI magic!</div>', unsafe_allow_html=True)
             progress_bar.progress(40)
             
             # Step 2: Generate video
-            st.markdown('<div class="success-message">🔄 Step 2: Generating video... This may take 2-5 minutes.</div>', unsafe_allow_html=True)
+            st.markdown('<div class="success-message">🎬 Step 2: AI is creating your animated video... This may take 2-5 minutes.</div>', unsafe_allow_html=True)
             progress_bar.progress(60)
             
             video_url = generate_video(image_url, prompt)
             
             if video_url:
-                st.markdown('<div class="success-message">✅ Step 2 Complete: Video generated successfully!</div>', unsafe_allow_html=True)
+                st.markdown('<div class="success-message">✅ Step 2 Complete: Your video is ready!</div>', unsafe_allow_html=True)
                 progress_bar.progress(80)
                 
                 # Step 3: Download video
-                st.markdown('<div class="success-message">🔄 Step 3: Downloading video...</div>', unsafe_allow_html=True)
+                st.markdown('<div class="success-message">📥 Step 3: Preparing your video for download...</div>', unsafe_allow_html=True)
                 
                 video_path, video_bytes = download_video(video_url)
                 
                 if video_path and video_bytes:
                     progress_bar.progress(100)
-                    st.markdown('<div class="success-message">✅ All Steps Complete: Video ready!</div>', unsafe_allow_html=True)
+                    st.markdown('<div class="success-message">🎉 All Done! Your animated video is ready to enjoy!</div>', unsafe_allow_html=True)
                     
                     # Store in session state
                     st.session_state.video_generated = True
@@ -588,8 +597,8 @@ if st.session_state.video_generated and hasattr(st.session_state, 'video_bytes')
     st.markdown("---")
     st.subheader("🎥 Your Generated Video")
     
-    # Display video
-    st.video(st.session_state.video_bytes)
+    # Display video with consistent size
+    st.video(st.session_state.video_bytes, width=300)
     
     # Download button
     st.download_button(
