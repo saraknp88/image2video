@@ -359,22 +359,16 @@ if 'processing' not in st.session_state:
 # Configuration in sidebar
 with st.sidebar:
     st.header("⚙️ Configuration")
-    api_token = st.text_input(
-        "Replicate API Token",
-        type="password",
-        help="Enter your Replicate API token",
-        placeholder="r8_..."
-    )
+    st.info("API keys are configured via Streamlit secrets")
     
     st.markdown("---")
     st.markdown("### 📝 How to Use")
     st.markdown("""
-    1. Enter your Replicate API token
-    2. Upload an image
-    3. Describe what should happen in the video
-    4. Click 'Generate Video'
-    5. Wait 2-5 minutes for processing
-    6. Download your video!
+    1. Upload an image
+    2. Describe what should happen in the video
+    3. Click 'Generate Video'
+    4. Wait 2-5 minutes for processing
+    5. Download your video!
     """)
 
 def upload_to_postimage(image_file):
@@ -416,13 +410,10 @@ def upload_to_postimage(image_file):
         st.error(f"Error uploading image: {str(e)}")
         return None
 
-def generate_video(image_url, prompt, api_token):
+def generate_video(image_url, prompt):
     """Generate video using Replicate API"""
     try:
-        # Initialize Replicate client
-        client = replicate.Client(api_token=api_token)
-        
-        # Call the model
+        # Call the model using the global client
         output_url = client.run(
             "minimax/hailuo-02-fast",
             input={
@@ -495,13 +486,10 @@ with col2:
     # Generate button
     can_generate = (uploaded_file is not None and 
                    prompt.strip() and 
-                   api_token.strip() and 
                    not st.session_state.processing)
     
     if st.button("🎬 Generate Video", disabled=not can_generate):
-        if not api_token.strip():
-            st.error("Please enter your Replicate API token in the sidebar!")
-        elif not uploaded_file:
+        if not uploaded_file:
             st.error("Please upload an image!")
         elif not prompt.strip():
             st.error("Please enter a prompt!")
@@ -512,7 +500,7 @@ with col2:
     st.markdown('</div>', unsafe_allow_html=True)
 
 # Processing section
-if st.session_state.processing and uploaded_file and prompt.strip() and api_token.strip():
+if st.session_state.processing and uploaded_file and prompt.strip():
     st.markdown("---")
     
     # Progress tracking
@@ -535,7 +523,7 @@ if st.session_state.processing and uploaded_file and prompt.strip() and api_toke
             st.markdown('<div class="success-message">🔄 Step 2: Generating video... This may take 2-5 minutes.</div>', unsafe_allow_html=True)
             progress_bar.progress(60)
             
-            video_url = generate_video(image_url, prompt, api_token)
+            video_url = generate_video(image_url, prompt)
             
             if video_url:
                 st.markdown('<div class="success-message">✅ Step 2 Complete: Video generated successfully!</div>', unsafe_allow_html=True)
