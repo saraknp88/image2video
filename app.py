@@ -688,7 +688,9 @@ if st.session_state.video_generated and hasattr(st.session_state, 'video_bytes')
             unsafe_allow_html=True
         )
         
-        # Hidden Streamlit buttons for functionality
+        # Hidden Streamlit buttons for functionality (completely hidden)
+        st.markdown('<div style="display: none;">', unsafe_allow_html=True)
+        
         col1, col2 = st.columns(2)
         with col1:
             st.download_button(
@@ -702,6 +704,8 @@ if st.session_state.video_generated and hasattr(st.session_state, 'video_bytes')
         with col2:
             if st.button("📤 Share", key="share-btn"):
                 st.session_state.show_share_options = True
+        
+        st.markdown('</div>', unsafe_allow_html=True)
     
     # Share options modal
     if hasattr(st.session_state, 'show_share_options') and st.session_state.show_share_options:
