@@ -602,54 +602,42 @@ with col2:
 if st.session_state.processing and uploaded_file and prompt.strip():
     st.markdown("---")
     
-    # Progress tracking with better styling
-    st.markdown('<div class="success-message">🎬 Starting your video generation journey...</div>', unsafe_allow_html=True)
+    # Progress bar only
     progress_bar = st.progress(0)
-    status_container = st.container()
     
-    with status_container:
-        # Step 1: Upload image
-        st.markdown('<div class="success-message">📤 Step 1: Preparing your image for AI processing...</div>', unsafe_allow_html=True)
-        progress_bar.progress(20)
+    # Step 1: Upload image
+    progress_bar.progress(20)
+    image_url = upload_to_imgbb(uploaded_file)
+    
+    if image_url:
+        progress_bar.progress(40)
         
-        image_url = upload_to_imgbb(uploaded_file)
+        # Step 2: Generate video
+        progress_bar.progress(60)
+        video_url = generate_video(image_url, prompt)
         
-        if image_url:
-            st.markdown('<div class="success-message">✅ Step 1 Complete: Image ready for AI magic!</div>', unsafe_allow_html=True)
-            progress_bar.progress(40)
+        if video_url:
+            progress_bar.progress(80)
             
-            # Step 2: Generate video
-            st.markdown('<div class="success-message">🎬 Step 2: AI is creating your animated video... This may take 2-5 minutes.</div>', unsafe_allow_html=True)
-            progress_bar.progress(60)
+            # Step 3: Download video
+            video_path, video_bytes = download_video(video_url)
             
-            video_url = generate_video(image_url, prompt)
-            
-            if video_url:
-                st.markdown('<div class="success-message">✅ Step 2 Complete: Your video is ready!</div>', unsafe_allow_html=True)
-                progress_bar.progress(80)
+            if video_path and video_bytes:
+                progress_bar.progress(100)
                 
-                # Step 3: Download video
-                st.markdown('<div class="success-message">📥 Step 3: Preparing your video for download...</div>', unsafe_allow_html=True)
+                # Store in session state
+                st.session_state.video_generated = True
+                st.session_state.video_path = video_path
+                st.session_state.video_bytes = video_bytes
+                st.session_state.processing = False
                 
-                video_path, video_bytes = download_video(video_url)
-                
-                if video_path and video_bytes:
-                    progress_bar.progress(100)
-                    st.markdown('<div class="success-message">🎉 All Done! Your animated video is ready to enjoy!</div>', unsafe_allow_html=True)
-                    
-                    # Store in session state
-                    st.session_state.video_generated = True
-                    st.session_state.video_path = video_path
-                    st.session_state.video_bytes = video_bytes
-                    st.session_state.processing = False
-                    
-                    st.rerun()
-                else:
-                    st.session_state.processing = False
+                st.rerun()
             else:
                 st.session_state.processing = False
         else:
             st.session_state.processing = False
+    else:
+        st.session_state.processing = False
 
 # Display video result
 if st.session_state.video_generated and hasattr(st.session_state, 'video_bytes'):
