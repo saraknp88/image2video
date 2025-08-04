@@ -671,50 +671,37 @@ if st.session_state.video_generated and hasattr(st.session_state, 'video_bytes')
         # Display video with consistent size
         st.video(st.session_state.video_bytes, width=400)
         
-        # Create buttons that align with video width using CSS
+        # Create perfectly aligned custom buttons with functionality
         st.markdown(
             """
-            <style>
-            .video-button-container {
-                width: 400px !important;
-                max-width: 400px !important;
-                margin: 10px 0 !important;
-            }
-            .video-button-container > div {
-                width: 100% !important;
-            }
-            .video-button-container .stButton > button,
-            .video-button-container .stDownloadButton > button {
-                width: 100% !important;
-                padding: 12px 16px !important;
-                font-size: 14px !important;
-                border-radius: 12px !important;
-            }
-            </style>
+            <div style="width: 400px; margin: 10px 0;">
+                <div style="display: flex; gap: 8px;">
+                    <div style="flex: 1;">
+                        <button onclick="document.getElementById('download-btn').click()" style="width: 100%; background: linear-gradient(135deg, #f59e0b 0%, #f97316 50%, #8b5cf6 100%); color: white; border: none; padding: 12px 16px; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 14px; transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(245, 158, 11, 0.25);">📥 Download</button>
+                    </div>
+                    <div style="flex: 1;">
+                        <button onclick="document.getElementById('share-btn').click()" style="width: 100%; background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #f59e0b 100%); color: white; border: none; padding: 12px 16px; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 14px; transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(139, 92, 246, 0.25);">📤 Share</button>
+                    </div>
+                </div>
+            </div>
             """,
             unsafe_allow_html=True
         )
         
-        # Create buttons with proper width alignment
-        with st.container():
-            st.markdown('<div class="video-button-container">', unsafe_allow_html=True)
-            
-            # Download and Share buttons
-            col1, col2 = st.columns(2)
-            with col1:
-                st.download_button(
-                    label="📥 Download",
-                    data=st.session_state.video_bytes,
-                    file_name=st.session_state.video_path,
-                    mime="video/mp4",
-                    use_container_width=True
-                )
-            
-            with col2:
-                if st.button("📤 Share", use_container_width=True):
-                    st.session_state.show_share_options = True
-            
-            st.markdown('</div>', unsafe_allow_html=True)
+        # Hidden Streamlit buttons for functionality
+        col1, col2 = st.columns(2)
+        with col1:
+            st.download_button(
+                label="📥 Download",
+                data=st.session_state.video_bytes,
+                file_name=st.session_state.video_path,
+                mime="video/mp4",
+                key="download-btn"
+            )
+        
+        with col2:
+            if st.button("📤 Share", key="share-btn"):
+                st.session_state.show_share_options = True
     
     # Share options modal
     if hasattr(st.session_state, 'show_share_options') and st.session_state.show_share_options:
