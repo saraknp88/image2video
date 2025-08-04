@@ -396,19 +396,18 @@ def upload_to_imgbb(image_file):
         # ImgBB API endpoint
         url = "https://api.imgbb.com/1/upload"
         
-        # Prepare the data for upload
+        # Prepare the data for upload - using form data with image as string
         data = {
             'key': imgbb_key,
             'image': image_base64,
             'name': 'uploaded_image'
         }
         
-        # Upload to ImgBB
+        # Upload to ImgBB using form data
         response = requests.post(url, data=data, timeout=30)
         
         # Debug information
         st.info(f"Response status: {response.status_code}")
-        st.info(f"Response headers: {dict(response.headers)}")
         
         if response.status_code == 200:
             result = response.json()
@@ -421,6 +420,10 @@ def upload_to_imgbb(image_file):
                 return None
         elif response.status_code == 403:
             st.error("403 Forbidden: Check if your ImgBB API key is valid and has upload permissions")
+            st.error(f"Response text: {response.text}")
+            return None
+        elif response.status_code == 400:
+            st.error("400 Bad Request: Invalid image format or API key issue")
             st.error(f"Response text: {response.text}")
             return None
         else:
