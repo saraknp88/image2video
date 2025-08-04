@@ -64,7 +64,7 @@ def generate_video(image_url, prompt):
             return None
             
         output = client.run(
-            "minimax/hailuo-02-fast:8b8b8b8b8b8b8b8b8b8b8b8b8b8b8b8b8b8b8b8b8b",
+            "minimax/hailuo-02-fast",
             input={
                 "image": image_url,
                 "prompt": prompt,
