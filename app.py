@@ -542,10 +542,7 @@ with col1:
         help="Upload the image you want to animate"
     )
     
-    if uploaded_file is not None:
-        # Display the uploaded image with consistent size
-        image = Image.open(uploaded_file)
-        st.image(image, caption="Uploaded Image", width=300)
+    # Image will be displayed in the results section after generation
     
     st.markdown('</div>', unsafe_allow_html=True)
 
