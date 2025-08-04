@@ -633,10 +633,22 @@ if st.session_state.processing and uploaded_file and prompt.strip():
 # Display video result
 if st.session_state.video_generated and hasattr(st.session_state, 'video_bytes'):
     st.markdown("---")
-    st.subheader("🎥 Your Generated Video")
+    st.subheader("🎥 Before & After Comparison")
     
-    # Display video with consistent size
-    st.video(st.session_state.video_bytes, width=300)
+    # Create two columns for side-by-side display
+    col1_result, col2_result = st.columns(2)
+    
+    with col1_result:
+        st.markdown("**📸 Original Image**")
+        # Display the original uploaded image
+        if uploaded_file is not None:
+            image = Image.open(uploaded_file)
+            st.image(image, caption="Original Image", width=300)
+    
+    with col2_result:
+        st.markdown("**🎬 Generated Video**")
+        # Display video with consistent size
+        st.video(st.session_state.video_bytes, width=300)
     
     # Download button
     st.download_button(
