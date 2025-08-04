@@ -652,12 +652,12 @@ if st.session_state.video_generated and hasattr(st.session_state, 'video_bytes')
         # Display the original uploaded image
         if uploaded_file is not None:
             image = Image.open(uploaded_file)
-            st.image(image, caption="Original Image", width=400)
+            st.image(image, caption="Original Image", width=500)
     
     with col2_result:
         st.markdown("**🎬 Generated Video**")
-        # Display video with consistent size
-        st.video(st.session_state.video_bytes, width=400)
+        # Display video with width matching prompt window
+        st.video(st.session_state.video_bytes, width=500)
         
         # Create working Download and Share buttons
         col1, col2 = st.columns(2)
