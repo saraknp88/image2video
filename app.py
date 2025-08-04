@@ -646,24 +646,24 @@ if st.session_state.video_generated and hasattr(st.session_state, 'video_bytes')
         st.markdown("**🎬 Generated Video**")
         # Display video with consistent size
         st.video(st.session_state.video_bytes, width=300)
-    
-    # Create two columns for buttons
-    col1_buttons, col2_buttons = st.columns(2)
-    
-    with col1_buttons:
-        # Small download button
-        st.download_button(
-            label="📥 Download",
-            data=st.session_state.video_bytes,
-            file_name=st.session_state.video_path,
-            mime="video/mp4",
-            use_container_width=False
-        )
-    
-    with col2_buttons:
-        # Share button with social media options
-        if st.button("📤 Share", use_container_width=False):
-            st.session_state.show_share_options = True
+        
+        # Create two small columns for buttons under the video only
+        button_col1, button_col2 = st.columns(2)
+        
+        with button_col1:
+            # Small download button
+            st.download_button(
+                label="📥 Download",
+                data=st.session_state.video_bytes,
+                file_name=st.session_state.video_path,
+                mime="video/mp4",
+                use_container_width=False
+            )
+        
+        with button_col2:
+            # Share button with social media options
+            if st.button("📤 Share", use_container_width=False):
+                st.session_state.show_share_options = True
     
     # Share options modal
     if hasattr(st.session_state, 'show_share_options') and st.session_state.show_share_options:
@@ -698,8 +698,7 @@ if st.session_state.video_generated and hasattr(st.session_state, 'video_bytes')
             st.session_state.show_share_options = False
             st.rerun()
     
-    # Success message
-    st.success(f"🎉 Video generated successfully! File saved as: {st.session_state.video_path}")
+    # Success message removed as requested
     
     # Reset button
     if st.button("🔄 Generate Another Video"):
