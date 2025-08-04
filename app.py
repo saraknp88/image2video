@@ -664,7 +664,7 @@ if st.session_state.video_generated and hasattr(st.session_state, 'video_bytes')
         # Display the original uploaded image
         if uploaded_file is not None:
             image = Image.open(uploaded_file)
-            st.image(image, caption="Original Image", width=400, use_container_width=True)
+            st.image(image, caption="Original Image", width=400)
     
     with col2_result:
         st.markdown("**🎬 Generated Video**")
