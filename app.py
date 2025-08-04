@@ -21,40 +21,21 @@ st.markdown("""
     /* Import Google Fonts */
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
     
-    /* Main App Background with animated gradient */
+    /* Main App Background - Clean white with subtle gradient */
     .stApp {
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
-        background-size: 400% 400%;
-        animation: gradientShift 20s ease infinite;
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #f1f5f9 100%);
         min-height: 100vh;
         position: relative;
-    }
-    
-    .stApp::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(255, 255, 255, 0.85);
-        backdrop-filter: blur(10px);
-        z-index: -1;
-    }
-    
-    @keyframes gradientShift {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
     }
     
     /* Main container styling */
     .main .block-container {
         padding-top: 2rem;
         padding-bottom: 2rem;
-        color: #2d3436;
-        line-height: 1.6;
+        color: #1e293b;
+        line-height: 1.7;
+        max-width: 1200px;
     }
     
     /* Header styling */
@@ -66,13 +47,14 @@ st.markdown("""
     
     .main-header h1 {
         font-size: 2.8rem;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #f59e0b 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
         font-weight: 800;
         margin-bottom: 0.5rem;
         position: relative;
+        letter-spacing: -0.02em;
     }
     
     .main-header h1::after {
@@ -83,29 +65,29 @@ st.markdown("""
         transform: translateX(-50%);
         width: 100px;
         height: 4px;
-        background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+        background: linear-gradient(90deg, #8b5cf6, #a855f7, #f59e0b);
         border-radius: 2px;
     }
     
     .main-header p {
         font-size: 1.2rem;
-        color: #2d3436;
-        font-weight: 600;
-        opacity: 0.8;
+        color: #475569;
+        font-weight: 500;
+        opacity: 0.9;
+        line-height: 1.6;
     }
     
     /* Card containers */
     .upload-container {
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 24px;
+        background: #ffffff;
+        border-radius: 20px;
         padding: 2rem;
         margin: 1rem 0;
-        box-shadow: 0 20px 60px rgba(102, 126, 234, 0.1), 0 8px 32px rgba(118, 75, 162, 0.08);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 0 4px 20px rgba(139, 92, 246, 0.08), 0 2px 8px rgba(168, 85, 247, 0.06);
+        border: 1px solid rgba(139, 92, 246, 0.1);
         position: relative;
         overflow: hidden;
-        transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+        transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
     }
     
     .upload-container::before {
@@ -114,8 +96,8 @@ st.markdown("""
         top: 0;
         left: 0;
         right: 0;
-        height: 4px;
-        background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+        height: 3px;
+        background: linear-gradient(90deg, #8b5cf6, #a855f7, #f59e0b);
         background-size: 200% 100%;
         animation: shimmer 3s ease-in-out infinite;
     }
@@ -126,34 +108,35 @@ st.markdown("""
     }
     
     .upload-container:hover {
-        transform: translateY(-8px) scale(1.02);
-        box-shadow: 0 25px 80px rgba(102, 126, 234, 0.15), 0 12px 40px rgba(118, 75, 162, 0.12);
+        transform: translateY(-4px);
+        box-shadow: 0 8px 30px rgba(139, 92, 246, 0.12), 0 4px 12px rgba(168, 85, 247, 0.08);
     }
     
     /* Section headers */
     h2, h3 {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
         font-weight: 700;
+        margin-bottom: 1rem;
     }
     
     /* Buttons */
     .stButton > button {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #f59e0b 100%);
         background-size: 200% 200%;
         animation: gradientMove 4s ease infinite;
         color: white !important;
         border: none;
-        padding: 1.2rem 2rem;
-        border-radius: 20px;
-        font-size: 1.1rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
-        box-shadow: 0 8px 30px rgba(102, 126, 234, 0.3);
+        padding: 1rem 2rem;
+        border-radius: 16px;
+        font-size: 1rem;
+        font-weight: 600;
+        text-transform: none;
+        letter-spacing: 0.5px;
+        transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+        box-shadow: 0 4px 20px rgba(139, 92, 246, 0.25);
         width: 100%;
         position: relative;
         overflow: hidden;
@@ -171,8 +154,8 @@ st.markdown("""
     }
     
     .stButton > button:hover {
-        transform: translateY(-3px) scale(1.02);
-        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 8px 30px rgba(139, 92, 246, 0.35);
     }
     
     .stButton > button:hover::before {
@@ -180,12 +163,13 @@ st.markdown("""
     }
     
     .stButton > button:disabled {
-        background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%) !important;
+        background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%) !important;
         cursor: not-allowed;
         opacity: 0.6;
         transform: none;
         box-shadow: none;
         animation: none;
+        color: #64748b !important;
     }
     
     @keyframes gradientMove {
@@ -198,118 +182,138 @@ st.markdown("""
     .stTextInput > div > div > input,
     .stTextArea > div > div > textarea,
     .stSelectbox > div > div > select {
-        border: 2px solid rgba(118, 75, 162, 0.2) !important;
-        border-radius: 16px !important;
-        background: rgba(255, 255, 255, 0.95) !important;
-        color: #2d3436 !important;
+        border: 2px solid rgba(139, 92, 246, 0.2) !important;
+        border-radius: 12px !important;
+        background: #ffffff !important;
+        color: #1e293b !important;
         font-weight: 500;
+        font-size: 0.95rem;
         transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
-        box-shadow: 0 4px 20px rgba(118, 75, 162, 0.05);
+        box-shadow: 0 2px 8px rgba(139, 92, 246, 0.05);
     }
     
     .stTextInput > div > div > input:focus,
     .stTextArea > div > div > textarea:focus,
     .stSelectbox > div > div > select:focus {
-        border-color: #667eea !important;
-        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1), 0 8px 25px rgba(102, 126, 234, 0.15) !important;
-        transform: translateY(-2px);
+        border-color: #8b5cf6 !important;
+        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1), 0 4px 16px rgba(139, 92, 246, 0.1) !important;
+        transform: translateY(-1px);
     }
     
     /* File uploader */
     .stFileUploader > div > div {
-        background: rgba(255, 255, 255, 0.95);
-        border: 3px dashed #764ba2;
-        border-radius: 20px;
+        background: #ffffff;
+        border: 2px dashed #8b5cf6;
+        border-radius: 16px;
         padding: 2rem;
-        transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+        transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
         position: relative;
         overflow: hidden;
     }
     
     .stFileUploader > div > div:hover {
-        border-color: #667eea;
-        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-        transform: scale(1.02);
-        box-shadow: 0 10px 30px rgba(118, 75, 162, 0.2);
+        border-color: #a855f7;
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%);
+        transform: scale(1.01);
+        box-shadow: 0 4px 20px rgba(139, 92, 246, 0.15);
     }
     
     /* Progress bars */
     .stProgress > div > div > div {
-        background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
-        border-radius: 10px;
+        background: linear-gradient(90deg, #8b5cf6, #a855f7, #f59e0b);
+        border-radius: 8px;
     }
     
     /* Status messages */
     .success-message {
-        background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
-        border: 2px solid rgba(102, 126, 234, 0.4);
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(168, 85, 247, 0.08) 100%);
+        border: 1px solid rgba(139, 92, 246, 0.2);
         border-radius: 12px;
-        padding: 1.2rem;
+        padding: 1rem;
         margin: 1rem 0;
-        color: #2d3436;
-        font-weight: 600;
-        font-size: 1rem;
-        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.15);
+        color: #1e293b;
+        font-weight: 500;
+        font-size: 0.95rem;
+        box-shadow: 0 2px 8px rgba(139, 92, 246, 0.08);
     }
     
     .error-message {
-        background: linear-gradient(135deg, rgba(245, 87, 108, 0.15) 0%, rgba(240, 147, 251, 0.15) 100%);
-        border: 2px solid rgba(245, 87, 108, 0.4);
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(248, 113, 113, 0.08) 100%);
+        border: 1px solid rgba(239, 68, 68, 0.2);
         border-radius: 12px;
-        padding: 1.2rem;
+        padding: 1rem;
         margin: 1rem 0;
-        color: #2d3436;
-        font-weight: 600;
-        font-size: 1rem;
-        box-shadow: 0 4px 20px rgba(245, 87, 108, 0.15);
+        color: #1e293b;
+        font-weight: 500;
+        font-size: 0.95rem;
+        box-shadow: 0 2px 8px rgba(239, 68, 68, 0.08);
     }
     
     /* Sidebar styling */
     .css-1d391kg {
-        background: rgba(255, 255, 255, 0.9);
-        backdrop-filter: blur(10px);
+        background: #ffffff;
+        border-right: 1px solid rgba(139, 92, 246, 0.1);
     }
     
     /* Download button */
     .stDownloadButton > button {
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 50%, #667eea 100%);
+        background: linear-gradient(135deg, #f59e0b 0%, #f97316 50%, #8b5cf6 100%);
         background-size: 200% 200%;
         animation: gradientMove 4s ease infinite;
         color: white !important;
         border: none;
         padding: 1rem 2rem;
         border-radius: 16px;
-        font-weight: 700;
-        text-transform: uppercase;
+        font-weight: 600;
+        text-transform: none;
         letter-spacing: 0.5px;
-        transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
-        box-shadow: 0 8px 30px rgba(240, 147, 251, 0.3);
+        transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+        box-shadow: 0 4px 20px rgba(245, 158, 11, 0.25);
         width: 100%;
     }
     
     .stDownloadButton > button:hover {
-        transform: translateY(-3px) scale(1.05);
-        box-shadow: 0 12px 40px rgba(240, 147, 251, 0.4);
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 8px 30px rgba(245, 158, 11, 0.35);
     }
     
     /* Video player */
     video {
-        border-radius: 15px;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         max-width: 100%;
     }
     
     /* Loading spinner */
     .stSpinner > div {
-        border-top-color: #667eea !important;
+        border-top-color: #8b5cf6 !important;
         animation: spin 1s linear infinite, colorShift 3s ease-in-out infinite;
     }
     
     @keyframes colorShift {
-        0% { border-top-color: #667eea; }
-        33% { border-top-color: #764ba2; }
-        66% { border-top-color: #f093fb; }
-        100% { border-top-color: #667eea; }
+        0% { border-top-color: #8b5cf6; }
+        33% { border-top-color: #a855f7; }
+        66% { border-top-color: #f59e0b; }
+        100% { border-top-color: #8b5cf6; }
+    }
+    
+    /* Labels and text */
+    .stTextInput > label,
+    .stTextArea > label,
+    .stSelectbox > label,
+    .stFileUploader > label {
+        color: #374151 !important;
+        font-weight: 600 !important;
+        font-size: 0.9rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+    
+    /* Help text */
+    .stTextInput > div > div > div,
+    .stTextArea > div > div > div,
+    .stSelectbox > div > div > div {
+        color: #6b7280 !important;
+        font-size: 0.85rem !important;
     }
     
     /* Responsive design */
@@ -319,8 +323,13 @@ st.markdown("""
         }
         
         .upload-container {
-            padding: 1rem;
+            padding: 1.5rem;
             margin: 0.5rem 0;
+        }
+        
+        .main .block-container {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
         }
     }
 </style>
