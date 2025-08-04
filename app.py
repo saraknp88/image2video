@@ -379,15 +379,17 @@ def upload_to_imgbb(image_file):
             st.error("ImgBB API key not found. Please check your Streamlit secrets.")
             return None
             
-        # Convert to bytes if it's a PIL image or file-like object
-        if hasattr(image_file, 'read'):
-            image_bytes = image_file.read()
-            image_file.seek(0)  # Reset file pointer
-        else:
-            # Convert PIL image to bytes
-            img_byte_arr = io.BytesIO()
-            image_file.save(img_byte_arr, format='PNG')
-            image_bytes = img_byte_arr.getvalue()
+        # Convert image to PIL Image and then to bytes
+        image = Image.open(image_file)
+        
+        # Convert to RGB if necessary (ImgBB prefers standard formats)
+        if image.mode != 'RGB':
+            image = image.convert('RGB')
+        
+        # Save to bytes buffer
+        img_buffer = io.BytesIO()
+        image.save(img_buffer, format='JPEG', quality=95)
+        image_bytes = img_buffer.getvalue()
         
         # Encode image to base64
         import base64
@@ -396,14 +398,18 @@ def upload_to_imgbb(image_file):
         # ImgBB API endpoint
         url = "https://api.imgbb.com/1/upload"
         
-        # Prepare the data for upload - using form data with image as string
+        # Prepare the data for upload
         data = {
             'key': imgbb_key,
-            'image': image_base64,
-            'name': 'uploaded_image'
+            'image': image_base64
         }
         
-        # Upload to ImgBB using form data
+        # Debug: Show some info about the image
+        st.info(f"Image size: {len(image_bytes)} bytes")
+        st.info(f"Base64 length: {len(image_base64)} characters")
+        st.info(f"Image format: JPEG")
+        
+        # Upload to ImgBB
         response = requests.post(url, data=data, timeout=30)
         
         # Debug information
