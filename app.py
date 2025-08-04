@@ -659,42 +659,7 @@ if st.session_state.video_generated and hasattr(st.session_state, 'video_bytes')
         # Display video with consistent size
         st.video(st.session_state.video_bytes, width=400)
         
-        # Create perfectly aligned custom buttons with functionality
-        st.markdown(
-            """
-            <div style="width: 400px; margin: 10px 0;">
-                <div style="display: flex; gap: 8px;">
-                    <div style="flex: 1;">
-                        <button onclick="document.getElementById('download-btn').click()" style="width: 100%; background: linear-gradient(135deg, #f59e0b 0%, #f97316 50%, #8b5cf6 100%); color: white; border: none; padding: 12px 16px; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 14px; transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(245, 158, 11, 0.25);">📥 Download</button>
-                    </div>
-                    <div style="flex: 1;">
-                        <button onclick="document.getElementById('share-btn').click()" style="width: 100%; background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #f59e0b 100%); color: white; border: none; padding: 12px 16px; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 14px; transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(139, 92, 246, 0.25);">📤 Share</button>
-                    </div>
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-        
-        # Hidden Streamlit buttons for functionality (positioned off-screen)
-        st.markdown(
-            """
-            <style>
-            #download-btn, #share-btn {
-                position: absolute !important;
-                left: -9999px !important;
-                top: -9999px !important;
-                opacity: 0 !important;
-                visibility: hidden !important;
-                width: 1px !important;
-                height: 1px !important;
-                overflow: hidden !important;
-            }
-            </style>
-            """,
-            unsafe_allow_html=True
-        )
-        
+        # Create working Download and Share buttons
         col1, col2 = st.columns(2)
         with col1:
             st.download_button(
@@ -702,11 +667,11 @@ if st.session_state.video_generated and hasattr(st.session_state, 'video_bytes')
                 data=st.session_state.video_bytes,
                 file_name=st.session_state.video_path,
                 mime="video/mp4",
-                key="download-btn"
+                use_container_width=True
             )
         
         with col2:
-            if st.button("📤 Share", key="share-btn"):
+            if st.button("📤 Share", use_container_width=True):
                 st.session_state.show_share_options = True
     
     # Share options modal
