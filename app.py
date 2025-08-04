@@ -647,23 +647,25 @@ if st.session_state.video_generated and hasattr(st.session_state, 'video_bytes')
         # Display video with consistent size
         st.video(st.session_state.video_bytes, width=300)
         
-        # Create two columns for buttons that span the full video width
-        button_col1, button_col2 = st.columns(2)
-        
-        with button_col1:
-            # Download button that takes half the video width
-            st.download_button(
-                label="📥 Download",
-                data=st.session_state.video_bytes,
-                file_name=st.session_state.video_path,
-                mime="video/mp4",
-                use_container_width=True
-            )
-        
-        with button_col2:
-            # Share button that takes half the video width
-            if st.button("📤 Share", use_container_width=True):
-                st.session_state.show_share_options = True
+        # Create a container for buttons that matches video width
+        with st.container():
+            # Create two equal columns for buttons
+            button_col1, button_col2 = st.columns(2)
+            
+            with button_col1:
+                # Download button - half video width
+                st.download_button(
+                    label="📥 Download",
+                    data=st.session_state.video_bytes,
+                    file_name=st.session_state.video_path,
+                    mime="video/mp4",
+                    use_container_width=True
+                )
+            
+            with button_col2:
+                # Share button - half video width
+                if st.button("📤 Share", use_container_width=True):
+                    st.session_state.show_share_options = True
     
     # Share options modal
     if hasattr(st.session_state, 'show_share_options') and st.session_state.show_share_options:
