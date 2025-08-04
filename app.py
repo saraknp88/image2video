@@ -407,10 +407,11 @@ def upload_to_imgbb(image_file):
         # ImgBB API endpoint
         url = "https://api.imgbb.com/1/upload"
         
-        # Prepare the data for upload
+        # Prepare the data for upload - using form data as recommended by API docs
         data = {
             'key': imgbb_key,
-            'image': image_base64
+            'image': image_base64,
+            'name': 'uploaded_image'
         }
         
         # Debug: Show some info about the image
@@ -427,7 +428,31 @@ def upload_to_imgbb(image_file):
         if response.status_code == 200:
             result = response.json()
             if result.get('success'):
-                return result['data']['url']
+                # Use the direct URL as recommended by API docs
+                image_url = result['data']['url']
+                st.info(f"Image uploaded successfully! Direct URL: {image_url}")
+                
+                # Also show the display URL for reference
+                display_url = result['data'].get('display_url', image_url)
+                st.info(f"Display URL: {display_url}")
+                
+                # Test if the URL is publicly accessible
+                try:
+                    test_response = requests.head(image_url, timeout=10)
+                    if test_response.status_code == 200:
+                        st.success("✅ Image URL is publicly accessible")
+                        return image_url
+                    else:
+                        st.warning(f"⚠️ Image URL returned status: {test_response.status_code}")
+                        # Try display URL as fallback
+                        test_response_display = requests.head(display_url, timeout=10)
+                        if test_response_display.status_code == 200:
+                            st.success("✅ Display URL is accessible, using as fallback")
+                            return display_url
+                        return image_url  # Still return original URL, might work for Replicate
+                except Exception as test_error:
+                    st.warning(f"⚠️ Could not test image URL accessibility: {test_error}")
+                    return image_url  # Still return it, might work for Replicate
             else:
                 error_msg = result.get('error', {}).get('message', 'Unknown error')
                 st.error(f"ImgBB upload failed: {error_msg}")
@@ -453,6 +478,13 @@ def upload_to_imgbb(image_file):
 def generate_video(image_url, prompt):
     """Generate video using Replicate API"""
     try:
+        # Test if the image URL is accessible
+        st.info(f"Testing image URL accessibility: {image_url}")
+        test_response = requests.head(image_url, timeout=30)
+        if test_response.status_code != 200:
+            st.error(f"Image URL not accessible: {test_response.status_code}")
+            return None
+            
         # Call the model using the global client
         output_url = client.run(
             "minimax/hailuo-02-fast",
@@ -464,6 +496,12 @@ def generate_video(image_url, prompt):
         
         return output_url
         
+    except requests.exceptions.Timeout:
+        st.error("Timeout accessing image URL. The image might not be publicly accessible.")
+        return None
+    except requests.exceptions.ConnectionError:
+        st.error("Connection error accessing image URL. Please try again.")
+        return None
     except Exception as e:
         st.error(f"Error generating video: {str(e)}")
         return None
