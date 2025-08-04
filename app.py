@@ -669,7 +669,7 @@ if st.session_state.video_generated and hasattr(st.session_state, 'video_bytes')
     with col2_result:
         st.markdown("**🎬 Generated Video**")
         # Display video with consistent size
-        st.video(st.session_state.video_bytes, width=400)
+        st.video(st.session_state.video_bytes, width=400, use_container_width=True)
         
         # Create compact buttons that align with video width
         button_col1, button_col2 = st.columns(2)
