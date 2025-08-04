@@ -371,9 +371,14 @@ with st.sidebar:
     5. Download your video!
     """)
 
-def upload_to_postimage(image_file):
-    """Upload image to PostImage and return the URL"""
+def upload_to_imgbb(image_file):
+    """Upload image to ImgBB and return the URL"""
     try:
+        # Check if API key is available
+        if not imgbb_key or imgbb_key == "":
+            st.error("ImgBB API key not found. Please check your Streamlit secrets.")
+            return None
+            
         # Convert to bytes if it's a PIL image or file-like object
         if hasattr(image_file, 'read'):
             image_bytes = image_file.read()
@@ -384,26 +389,43 @@ def upload_to_postimage(image_file):
             image_file.save(img_byte_arr, format='PNG')
             image_bytes = img_byte_arr.getvalue()
         
-        # PostImage API endpoint
-        url = "https://postimg.cc/json"
+        # Encode image to base64
+        import base64
+        image_base64 = base64.b64encode(image_bytes).decode('utf-8')
         
-        # Prepare the file for upload
-        files = {
-            'upload': ('image.png', image_bytes, 'image/png')
+        # ImgBB API endpoint
+        url = "https://api.imgbb.com/1/upload"
+        
+        # Prepare the data for upload
+        data = {
+            'key': imgbb_key,
+            'image': image_base64,
+            'name': 'uploaded_image'
         }
         
-        # Upload to PostImage
-        response = requests.post(url, files=files, timeout=30)
+        # Upload to ImgBB
+        response = requests.post(url, data=data, timeout=30)
+        
+        # Debug information
+        st.info(f"Response status: {response.status_code}")
+        st.info(f"Response headers: {dict(response.headers)}")
         
         if response.status_code == 200:
             result = response.json()
-            if result.get('status') == 'OK':
-                return result['url']
+            if result.get('success'):
+                return result['data']['url']
             else:
-                st.error(f"PostImage upload failed: {result.get('error', 'Unknown error')}")
+                error_msg = result.get('error', {}).get('message', 'Unknown error')
+                st.error(f"ImgBB upload failed: {error_msg}")
+                st.error(f"Full response: {result}")
                 return None
+        elif response.status_code == 403:
+            st.error("403 Forbidden: Check if your ImgBB API key is valid and has upload permissions")
+            st.error(f"Response text: {response.text}")
+            return None
         else:
             st.error(f"Upload failed with status code: {response.status_code}")
+            st.error(f"Response text: {response.text}")
             return None
             
     except Exception as e:
@@ -467,7 +489,7 @@ with col1:
     if uploaded_file is not None:
         # Display the uploaded image
         image = Image.open(uploaded_file)
-        st.image(image, caption="Uploaded Image", use_column_width=True)
+        st.image(image, caption="Uploaded Image", use_container_width=True)
     
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -509,10 +531,10 @@ if st.session_state.processing and uploaded_file and prompt.strip():
     
     with status_container:
         # Step 1: Upload image
-        st.markdown('<div class="success-message">🔄 Step 1: Uploading image to PostImage...</div>', unsafe_allow_html=True)
+        st.markdown('<div class="success-message">🔄 Step 1: Uploading image to ImgBB...</div>', unsafe_allow_html=True)
         progress_bar.progress(20)
         
-        image_url = upload_to_postimage(uploaded_file)
+        image_url = upload_to_imgbb(uploaded_file)
         
         if image_url:
             st.markdown('<div class="success-message">✅ Step 1 Complete: Image uploaded successfully!</div>', unsafe_allow_html=True)
