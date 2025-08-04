@@ -671,23 +671,42 @@ if st.session_state.video_generated and hasattr(st.session_state, 'video_bytes')
         # Display video with consistent size
         st.video(st.session_state.video_bytes, width=400)
         
-        # Create compact buttons that align with video width
-        button_col1, button_col2 = st.columns(2)
+        # Create buttons that align with video width
+        st.markdown(
+            """
+            <style>
+            .video-buttons {
+                width: 400px !important;
+                max-width: 400px !important;
+            }
+            .video-buttons > div {
+                width: 100% !important;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True
+        )
         
-        with button_col1:
-            # Download button - compact size
-            st.download_button(
-                label="📥 Download",
-                data=st.session_state.video_bytes,
-                file_name=st.session_state.video_path,
-                mime="video/mp4",
-                use_container_width=True
-            )
-        
-        with button_col2:
-            # Share button - compact size
-            if st.button("📤 Share", use_container_width=True):
-                st.session_state.show_share_options = True
+        # Create buttons with fixed width container
+        with st.container():
+            st.markdown('<div class="video-buttons">', unsafe_allow_html=True)
+            
+            # Download and Share buttons
+            col1, col2 = st.columns(2)
+            with col1:
+                st.download_button(
+                    label="📥 Download",
+                    data=st.session_state.video_bytes,
+                    file_name=st.session_state.video_path,
+                    mime="video/mp4",
+                    use_container_width=True
+                )
+            
+            with col2:
+                if st.button("📤 Share", use_container_width=True):
+                    st.session_state.show_share_options = True
+            
+            st.markdown('</div>', unsafe_allow_html=True)
     
     # Share options modal
     if hasattr(st.session_state, 'show_share_options') and st.session_state.show_share_options:
