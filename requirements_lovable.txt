@@ -1,0 +1,5 @@
+lovable
+replicate
+requests
+Pillow
+python-dotenv 
