@@ -79,12 +79,12 @@ st.markdown("""
     
     /* Card containers */
     .upload-container {
-        background: #ffffff;
+        background: transparent;
         border-radius: 20px;
         padding: 2rem;
         margin: 1rem 0;
-        box-shadow: 0 4px 20px rgba(139, 92, 246, 0.08), 0 2px 8px rgba(168, 85, 247, 0.06);
-        border: 1px solid rgba(139, 92, 246, 0.1);
+        box-shadow: none;
+        border: none;
         position: relative;
         overflow: hidden;
         transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
@@ -109,7 +109,7 @@ st.markdown("""
     
     .upload-container:hover {
         transform: translateY(-4px);
-        box-shadow: 0 8px 30px rgba(139, 92, 246, 0.12), 0 4px 12px rgba(168, 85, 247, 0.08);
+        box-shadow: none;
     }
     
     /* Section headers */
