@@ -7,6 +7,10 @@ from datetime import datetime
 from PIL import Image
 import io
 
+# Initialize clients and API keys
+client = replicate.Client(api_token=st.secrets["REPLICATE_API_TOKEN"])
+imgbb_key = st.secrets["IMGBB_API_KEY"]
+
 # Configure Streamlit page
 st.set_page_config(
     page_title="Image to Video Generator",
