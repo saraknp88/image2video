@@ -119,7 +119,8 @@ st.markdown("""
         -webkit-text-fill-color: transparent;
         background-clip: text;
         font-weight: 700;
-        margin-bottom: 1rem;
+        margin-bottom: 0.5rem;
+        margin-top: 0.5rem;
     }
     
     /* Buttons */
