@@ -276,19 +276,43 @@ st.markdown("""
         animation: gradientMove 4s ease infinite;
         color: white !important;
         border: none;
-        padding: 1rem 2rem;
-        border-radius: 16px;
+        padding: 0.75rem 1.5rem;
+        border-radius: 12px;
         font-weight: 600;
         text-transform: none;
         letter-spacing: 0.5px;
         transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
         box-shadow: 0 4px 20px rgba(245, 158, 11, 0.25);
         width: 100%;
+        font-size: 0.9rem;
     }
     
     .stDownloadButton > button:hover {
         transform: translateY(-2px) scale(1.02);
         box-shadow: 0 8px 30px rgba(245, 158, 11, 0.35);
+    }
+    
+    /* Share button */
+    .stButton > button {
+        background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #f59e0b 100%);
+        background-size: 200% 200%;
+        animation: gradientMove 4s ease infinite;
+        color: white !important;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 12px;
+        font-weight: 600;
+        text-transform: none;
+        letter-spacing: 0.5px;
+        transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+        box-shadow: 0 4px 20px rgba(139, 92, 246, 0.25);
+        width: 100%;
+        font-size: 0.9rem;
+    }
+    
+    .stButton > button:hover {
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 8px 30px rgba(139, 92, 246, 0.35);
     }
     
     /* Video player */
@@ -640,32 +664,30 @@ if st.session_state.video_generated and hasattr(st.session_state, 'video_bytes')
         # Display the original uploaded image
         if uploaded_file is not None:
             image = Image.open(uploaded_file)
-            st.image(image, caption="Original Image", width=300)
+            st.image(image, caption="Original Image", width=400, use_container_width=True)
     
     with col2_result:
         st.markdown("**🎬 Generated Video**")
         # Display video with consistent size
-        st.video(st.session_state.video_bytes, width=300)
+        st.video(st.session_state.video_bytes, width=400)
         
-        # Create a container for buttons that matches video width
-        with st.container():
-            # Create two equal columns for buttons
-            button_col1, button_col2 = st.columns(2)
-            
-            with button_col1:
-                # Download button - half video width
-                st.download_button(
-                    label="📥 Download",
-                    data=st.session_state.video_bytes,
-                    file_name=st.session_state.video_path,
-                    mime="video/mp4",
-                    use_container_width=True
-                )
-            
-            with button_col2:
-                # Share button - half video width
-                if st.button("📤 Share", use_container_width=True):
-                    st.session_state.show_share_options = True
+        # Create compact buttons that align with video width
+        button_col1, button_col2 = st.columns(2)
+        
+        with button_col1:
+            # Download button - compact size
+            st.download_button(
+                label="📥 Download",
+                data=st.session_state.video_bytes,
+                file_name=st.session_state.video_path,
+                mime="video/mp4",
+                use_container_width=True
+            )
+        
+        with button_col2:
+            # Share button - compact size
+            if st.button("📤 Share", use_container_width=True):
+                st.session_state.show_share_options = True
     
     # Share options modal
     if hasattr(st.session_state, 'show_share_options') and st.session_state.show_share_options:
